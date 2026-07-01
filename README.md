@@ -12,7 +12,7 @@ All three back-ends use identical math and the identical coloring function
 (`ColorMap.h`), so their output is **pixel-for-pixel identical** - what you
 compare is speed, not results.
 
-![screenshot](docs/screenshot.png)
+![screenshot](screenshot.png)
 
 ## Features
 
