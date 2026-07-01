@@ -1,25 +1,25 @@
-# Fractal Studio — CPU vs CUDA
+# Fractal Studio - CPU vs CUDA
 
 An interactive Mandelbrot / Julia set explorer built with **Qt 6 (C++17)** that
 runs the *same* computation on three different back-ends and compares their
 performance live in the UI:
 
-- **CPU (single-threaded)** — a straightforward baseline
-- **CPU (multi-threaded)** — the same math parallelized across rows with `std::thread`
-- **CUDA (GPU)** — one thread per pixel, computed and colored on the GPU
+- **CPU (single-threaded)** - a straightforward baseline
+- **CPU (multi-threaded)** - the same math parallelized across rows with `std::thread`
+- **CUDA (GPU)** - one thread per pixel, computed and colored on the GPU
 
 All three back-ends use identical math and the identical coloring function
-(`ColorMap.h`), so their output is **pixel-for-pixel identical** — what you
+(`ColorMap.h`), so their output is **pixel-for-pixel identical** - what you
 compare is speed, not results.
 
-![screenshot placeholder](docs/screenshot.png)
+![screenshot](docs/screenshot.png)
 
 ## Features
 
 - Switch between Mandelbrot and Julia sets (with adjustable Julia constant `c`)
 - Mouse-wheel zoom (zooms toward the cursor) and drag-to-pan
 - Adjustable iteration count and color palette (Electric / Fire / Ocean)
-- **Benchmark all back-ends** button — runs every available back-end on the
+- **Benchmark all back-ends** button - runs every available back-end on the
   current view and reports each timing plus the speedup relative to the
   single-threaded CPU baseline
 - Dark Fusion theme for clean screenshots
@@ -30,11 +30,11 @@ compare is speed, not results.
 - **CMake 3.20+**
 - A C++17 compiler (MSVC 2022 / GCC / Clang)
 - For the GPU back-end: **NVIDIA CUDA Toolkit** and an NVIDIA GPU
-  (without them the project builds in CPU-only mode — see below)
+  (without them the project builds in CPU-only mode - see below)
 
 ## Building a Visual Studio solution (Windows, with CUDA)
 
-The easiest path — no hand-written project files, CMake configures Qt's MOC step,
+The easiest path - no hand-written project files, CMake configures Qt's MOC step,
 the CUDA build and all include/lib paths for you:
 
 1. Open `generate_vs_solution.bat`, set `QT_DIR` to your Qt installation
@@ -87,13 +87,13 @@ The CUDA back-end simply disappears from the UI; the two CPU back-ends remain.
   nvcc and to nothing otherwise, so a single `colorize()` function runs on both
   the CPU and the GPU.
 - Coloring happens on the device: the GPU returns a finished image, and the
-  reported time includes both the kernel and the device-to-host copy — an honest
+  reported time includes both the kernel and the device-to-host copy - an honest
   "time to get a displayable image".
 - The CUDA and Qt layers are kept strictly separate (nvcc and Qt's MOC don't
   mix): the GPU code talks to the app through the Qt-free `CudaFractal.h`
   interface only.
 - The iteration math runs in `float`. That's the honest choice on a consumer
-  GPU — FP64 is throttled roughly 1:64, so `double` would erase most of the GPU
+  GPU - FP64 is throttled roughly 1:64, so `double` would erase most of the GPU
   advantage. The tradeoff is zoom depth (float bottoms out around 1e-5 of span).
 
 ## Possible improvements
@@ -105,4 +105,4 @@ The CUDA back-end simply disappears from the UI; the two CPU back-ends remain.
 
 ## License
 
-MIT — do whatever you like, no warranty.
+MIT - do whatever you like, no warranty.
