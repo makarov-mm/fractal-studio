@@ -18,7 +18,9 @@ struct RenderResult {
     bool    ok = false;
 };
 
-// Owns a reusable pixel buffer and dispatches rendering to the chosen back-end.
+// Owns reusable pixel buffers and dispatches rendering to the chosen back-end.
+// Not thread-safe by itself; in the app a single instance lives on the worker
+// thread (RenderWorker) and is never touched from the GUI thread.
 class FractalRenderer {
 public:
     RenderResult render(const FractalParams& p, Backend backend);
@@ -27,11 +29,13 @@ public:
     static QString backendName(Backend b);
 
 private:
-    std::vector<uint32_t> m_buffer;
+    std::vector<uint32_t> m_buffer;     // final image, width * height
+    std::vector<uint32_t> m_hiBuffer;   // supersampled image, (w*ss) * (h*ss)
 
     RenderResult renderCpu(const FractalParams& p, bool multiThreaded);
 #ifdef HAVE_CUDA
     RenderResult renderCuda(const FractalParams& p);
 #endif
+    void   downsample(const FractalParams& p);
     QImage bufferToImage(const FractalParams& p);
 };
