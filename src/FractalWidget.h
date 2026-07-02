@@ -3,8 +3,10 @@
 #include <QImage>
 #include <QPoint>
 
-// Displays the rendered fractal image (1:1 with widget pixels) and reports
-// mouse-wheel zoom, drag-pan and resize gestures to the MainWindow.
+// Displays the rendered fractal image and reports mouse-wheel zoom, drag-pan,
+// resize and hover gestures to the MainWindow. Preview frames rendered at a
+// reduced resolution are stretched to fill the widget until the full-quality
+// frame replaces them.
 class FractalWidget : public QWidget {
     Q_OBJECT
 public:
@@ -15,6 +17,8 @@ signals:
     void zoomRequested(QPointF widgetPos, double factor);
     void panRequested(QPoint deltaPixels);
     void canvasResized(QSize newSize);
+    void hovered(QPointF widgetPos);          // for the coordinate read-out
+    void juliaSeedPicked(QPointF widgetPos);  // right-click: pick Julia c
 
 protected:
     void paintEvent(QPaintEvent*) override;

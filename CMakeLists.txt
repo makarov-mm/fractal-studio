@@ -20,13 +20,16 @@ set(SOURCES
     src/MainWindow.cpp
     src/FractalWidget.cpp
     src/FractalRenderer.cpp
+    src/RenderWorker.cpp
 )
 set(HEADERS
     src/MainWindow.h
     src/FractalWidget.h
     src/FractalRenderer.h
+    src/RenderWorker.h
     src/Types.h
     src/ColorMap.h
+    src/FractalMath.h
 )
 
 if(USE_CUDA)
@@ -37,6 +40,13 @@ endif()
 
 add_executable(FractalStudio ${SOURCES} ${HEADERS})
 target_link_libraries(FractalStudio PRIVATE Qt6::Widgets)
+
+# Source files contain UTF-8 string literals; tell MSVC explicitly
+# (only for C++ translation units - nvcc gets its host flags separately).
+if(MSVC)
+    target_compile_options(FractalStudio PRIVATE
+        $<$<COMPILE_LANGUAGE:CXX>:/utf-8>)
+endif()
 
 if(USE_CUDA)
     target_compile_definitions(FractalStudio PRIVATE HAVE_CUDA)

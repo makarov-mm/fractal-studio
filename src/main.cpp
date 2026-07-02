@@ -2,10 +2,17 @@
 #include <QStyleFactory>
 #include <QPalette>
 #include <QColor>
+#include <QMetaType>
 #include "MainWindow.h"
+#include "RenderWorker.h"
 
 int main(int argc, char** argv) {
     QApplication app(argc, argv);
+
+    // Types crossing the GUI <-> worker thread boundary in queued connections.
+    qRegisterMetaType<FractalParams>("FractalParams");
+    qRegisterMetaType<RenderResult>("RenderResult");
+    qRegisterMetaType<Backend>("Backend");
 
     // A modern dark theme so the fractals pop and screenshots look clean.
     app.setStyle(QStyleFactory::create("Fusion"));

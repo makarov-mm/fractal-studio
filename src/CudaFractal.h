@@ -10,9 +10,11 @@ bool cudaAvailable();
 
 // Renders the fractal on the GPU into the host buffer `pixels`
 // (must hold p.width * p.height uint32_t values, format 0xAARRGGBB).
-// The elapsed GPU time (kernel + device-to-host copy) in milliseconds is
+// Supersampling and down-sampling both run on the device, so the
+// device-to-host transfer is always just the final image.
+// The elapsed GPU time (kernels + device-to-host copy) in milliseconds is
 // written to *elapsedMs.
 void cudaRenderFractal(const FractalParams& p, uint32_t* pixels, double* elapsedMs);
 
-// Releases the persistent device buffer (optional; called at shutdown).
+// Releases the persistent device buffers (optional; called at shutdown).
 void cudaShutdown();
